@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import '../css/Game.css'
+import '../css/game.css'
 import greenDark from '../img/greenDark.png'
 import redDark from '../img/redDark.png'
 import yellowDark from '../img/yellowDark.png'
