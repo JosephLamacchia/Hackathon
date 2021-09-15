@@ -20,7 +20,10 @@ export const Game = (sequenceLength: number) => {
 
             <div className="" style={{ position: "relative", display: "flex", justifyContent: "center", width: "100vw" }}>
                 <div className="circle" >  </div>
-                <div className="circle2" >  </div>
+                <div className="circle2" >
+                    <div className="" style={{ marginTop: "40%" }} >
+                        SIMON
+                    </div> </div>
                 <div className="simoncircle">
                     <table>
                         <thead>
