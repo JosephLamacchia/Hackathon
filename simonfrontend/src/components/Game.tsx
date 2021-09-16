@@ -18,6 +18,8 @@ export const Game = () => {
     //for game playing
     const [sequence, setSequence] = useState("");
     const [notPromptSequence, setNotPropmtSequence] = useState(true);
+    const [sequenceIndex, setSequenceIndex] = useState(0);
+    const [inGame, setInGame] = useState(false);
     const [delayTime, setDelayTime] = useState(1000);
 
     //for UI prompt
@@ -64,37 +66,32 @@ export const Game = () => {
         
         //finish prompting the sequence
         setNotPropmtSequence(true);
-
         setSequence(newSequence);
-        for (let lights of sequence) {
-            
-        }
+        setSequenceIndex(0);
+        setInGame(true);
     }
 
+    // handle in game event
+    const handleClicked = (prop:any) => {
+        if (inGame) return prop;
+    }
+
+    const handleRedClicked = () => {
+        
+    }
     
-    // const handleRedClicked = () => {
-    //     setRedSelected(false);
-
-    //     onmouseup = (onmouseover = (() => handleRedSelected))
-    // }
-    // const handleGreenClicked = () => {
-    //     setGreenSelected(false);
-
-    //     onmouseup = (onmouseover = (() => handleGreenSelected))
-    // }
+    const handleGreenClicked = () => {
+        
+    }
 
 
-    // const handleBlueClicked = () => {
-    //     setBlueSelected(false);
+    const handleBlueClicked = () => {
+        
+    }
 
-    //     onmouseup = (onmouseover = (() => handleBlueSelected))
-    // }
-
-    // const handleYellowClicked = () => {
-    //     setYellowSelected(false);
-
-    //     onmouseup = (onmouseover = (() => handleYellowSelected))
-    // }
+    const handleYellowClicked = () => {
+        
+    }
 
 
     
@@ -102,10 +99,6 @@ export const Game = () => {
 
     const handleSelected = (prop:any) => {
         if (notPromptSequence) return prop
-    }
-
-    const handleClicked = (prop:any) => {
-        if (notPromptSequence) return prop;
     }
 
     // blue
@@ -116,6 +109,7 @@ export const Game = () => {
 
         onmouseup = (() => {setBlueSelected(true)})
 
+        onclick = (() => {handleClicked(handleBlueClicked)})
 
         onmouseout = (() => {setBlueSelected(false) })
     }
@@ -128,6 +122,7 @@ export const Game = () => {
 
         onmouseup = (() => {setYellowSelected(true)})
 
+        onclick = (() => {handleClicked(handleYellowClicked)})
 
         onmouseout = (() => { setYellowSelected(false) })
     }
@@ -140,6 +135,8 @@ export const Game = () => {
 
         onmouseup = (() => {setRedSelected(true)})
 
+        onclick = (() => {handleClicked(handleRedClicked)})
+
         onmouseout = (() => {setRedSelected(false) })
     }
 
@@ -150,6 +147,8 @@ export const Game = () => {
         onmousedown =(() => {setGreenSelected(false)})
 
         onmouseup = (() => {setGreenSelected(true)})
+
+        onclick = (() => {handleClicked(handleGreenClicked)})
 
         onmouseout = (() => {setGreenSelected(false)})
     }
@@ -181,21 +180,21 @@ export const Game = () => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td onClick={() => AudioPlayer.buttonClick1()} onMouseOver={handleGreenSelected}>
+                            <td onClick={() => AudioPlayer.buttonClick1()} onMouseOver={handleSelected(handleGreenSelected)}>
                                 {greenSelected ? <img src={lightGreen} alt="greenLight" /> : <img src={greenDark} alt="greendarj" />}
 
                             </td>
-                            <td onClick={() => AudioPlayer.buttonClick2()} onMouseOver={handleRedSelected}>
+                            <td onClick={() => AudioPlayer.buttonClick2()} onMouseOver={handleSelected(handleRedSelected)}>
                                 {redSelected ? <img src={lightRed} alt="lightRed" /> : <img src={redDark} alt="redDark" />}
 
                             </td>
                         </tr>
                         <tr>
-                            <td onClick={() => AudioPlayer.buttonClick1()} onMouseOver={handleYellowSelected}>
+                            <td onClick={() => AudioPlayer.buttonClick1()} onMouseOver={handleSelected(handleYellowSelected)}>
                                 {yellowSelected ? <img src={yellowLight} alt="yellowLight" /> : <img src={yellowDark} alt="yellow" />}
 
                             </td>
-                            <td onClick={() => AudioPlayer.buttonClick2()} onMouseOver={handleBlueSelected}>
+                            <td onClick={() => AudioPlayer.buttonClick2()} onMouseOver={handleSelected(handleBlueSelected)}>
                                 {blueSelected ? <img src={blueLight} alt="blueLight" /> : <img src={blueDark} alt="blueDark" />}
                             </td>
                         </tr>
@@ -207,7 +206,7 @@ export const Game = () => {
         <div>
             <button  className="btn btn-primary" onClick={handleBeginGame}>Begin Game</button>
         </div>
-    </div>
+       </div>
         
     )  
 }
