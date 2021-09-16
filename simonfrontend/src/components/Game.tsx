@@ -72,82 +72,28 @@ export const Game = () => {
     }
 
     // handle in game event
-    const handleClicked = (prop:any) => {
-        AudioPlayer.buttonClick1();
-        if (inGame) return prop;
-    }
-
     // blue 0 yellow 1 red 2 green 3
-
-    const handleBlueClicked = () => {
-        let saveSequence = sequence;
-        if (saveSequence[sequenceIndex] == '2') {
-            // click the correct color
-            // calculating score could go here
-        } else {
-            // click the wrong color
-            AudioPlayer.buttonClick2();
-        }
-
-        //check if round ended
-        if (sequenceIndex+1 < saveSequence.length) {
-            //process to next index in sequence
-            setSequenceIndex(sequenceIndex + 1);
-        } else {
-            // entire sequence was correct
-        }
-    }
-
-    const handleYellowClicked = () => {
-        let saveSequence = sequence;
-        if (saveSequence[sequenceIndex] == '2') {
-        } else {
-            AudioPlayer.buttonClick2();
-        }
-
-        //check if round ended
-        if (sequenceIndex+1 < saveSequence.length) {
-            //process to next index in sequence
-            setSequenceIndex(sequenceIndex + 1);
-        } else {
-            // entire sequence was correct
+    const handleClicked = (colorClicked:string) => {
+        AudioPlayer.buttonClick1();
+        if (inGame) {
+            let saveSequence = sequence;
+            if (saveSequence[sequenceIndex] == colorClicked) {
+                // click the correct color
+                // calculating score could go here
+            } else {
+                // click the wrong color
+                AudioPlayer.buttonClick2();
+            }
+    
+            //check if round ended
+            if (sequenceIndex+1 < saveSequence.length) {
+                //process to next index in sequence
+                setSequenceIndex(sequenceIndex + 1);
+            } else {
+                // entire sequence was correct
+            }
         }
     }
-
-    const handleRedClicked = () => {
-        let saveSequence = sequence;
-        if (saveSequence[sequenceIndex] == '2') {
-        } else {
-            AudioPlayer.buttonClick2();
-        }
-
-        //check if round ended
-        if (sequenceIndex+1 < saveSequence.length) {
-            //process to next index in sequence
-            setSequenceIndex(sequenceIndex + 1);
-        } else {
-            // entire sequence was correct
-        }
-    }
-
-    const handleGreenClicked = () => {
-        let saveSequence = sequence;
-        if (saveSequence[sequenceIndex] == '3') {
-        } else {
-            AudioPlayer.buttonClick2();
-        }
-
-        //check if round ended
-        if (sequenceIndex+1 < saveSequence.length) {
-            //process to next index in sequence
-            setSequenceIndex(sequenceIndex + 1);
-        } else {
-            // entire sequence was correct
-        }
-    }
-
-
-
     
     // regular button light flashing
 
@@ -163,7 +109,7 @@ export const Game = () => {
 
         onmouseup = (() => {setBlueSelected(true)})
 
-        onclick = (() => {handleClicked(handleBlueClicked)})
+        onclick = (() => {handleClicked('0')})
 
         onmouseout = (() => {setBlueSelected(false) })
     }
@@ -176,7 +122,7 @@ export const Game = () => {
 
         onmouseup = (() => {setYellowSelected(true)})
 
-        onclick = (() => {handleClicked(handleYellowClicked)})
+        onclick = (() => {handleClicked('1')})
 
         onmouseout = (() => { setYellowSelected(false) })
     }
@@ -189,7 +135,7 @@ export const Game = () => {
 
         onmouseup = (() => {setRedSelected(true)})
 
-        onclick = (() => {handleClicked(handleRedClicked)})
+        onclick = (() => {handleClicked('2')})
 
         onmouseout = (() => {setRedSelected(false) })
     }
@@ -202,10 +148,11 @@ export const Game = () => {
 
         onmouseup = (() => {setGreenSelected(true)})
 
-        onclick = (() => {handleClicked(handleGreenClicked)})
+        onclick = (() => {handleClicked('3')})
 
         onmouseout = (() => {setGreenSelected(false)})
     }
+    
     const handleBeginGame = () => {
         if (gameState == 0)
         {
