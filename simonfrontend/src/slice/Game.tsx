@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 // NOTES(): GameStates 1 - Start of game, 3 = End if game
 export const gameSlice = createSlice({
-    name: "myDeck",
+    name: "gameState",
     initialState: {
         state: 0,
         sequenceNumber: 0,
@@ -32,5 +32,5 @@ export const gameSlice = createSlice({
     }
 });
 
-export const { beginGame, endGame} = gameSlice.actions;
+export const { beginGame, endGame, addToCpuSequence, addToPlayerSequence} = gameSlice.actions;
 export default gameSlice.reducer;
