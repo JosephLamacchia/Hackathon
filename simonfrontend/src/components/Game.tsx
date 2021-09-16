@@ -73,25 +73,79 @@ export const Game = () => {
 
     // handle in game event
     const handleClicked = (prop:any) => {
+        AudioPlayer.buttonClick1();
         if (inGame) return prop;
     }
 
-    const handleRedClicked = () => {
-        
-    }
-    
-    const handleGreenClicked = () => {
-        
-    }
-
+    // blue 0 yellow 1 red 2 green 3
 
     const handleBlueClicked = () => {
-        
+        let saveSequence = sequence;
+        if (saveSequence[sequenceIndex] == '2') {
+            // click the correct color
+            // calculating score could go here
+        } else {
+            // click the wrong color
+            AudioPlayer.buttonClick2();
+        }
+
+        //check if round ended
+        if (sequenceIndex+1 < saveSequence.length) {
+            //process to next index in sequence
+            setSequenceIndex(sequenceIndex + 1);
+        } else {
+            // entire sequence was correct
+        }
     }
 
     const handleYellowClicked = () => {
-        
+        let saveSequence = sequence;
+        if (saveSequence[sequenceIndex] == '2') {
+        } else {
+            AudioPlayer.buttonClick2();
+        }
+
+        //check if round ended
+        if (sequenceIndex+1 < saveSequence.length) {
+            //process to next index in sequence
+            setSequenceIndex(sequenceIndex + 1);
+        } else {
+            // entire sequence was correct
+        }
     }
+
+    const handleRedClicked = () => {
+        let saveSequence = sequence;
+        if (saveSequence[sequenceIndex] == '2') {
+        } else {
+            AudioPlayer.buttonClick2();
+        }
+
+        //check if round ended
+        if (sequenceIndex+1 < saveSequence.length) {
+            //process to next index in sequence
+            setSequenceIndex(sequenceIndex + 1);
+        } else {
+            // entire sequence was correct
+        }
+    }
+
+    const handleGreenClicked = () => {
+        let saveSequence = sequence;
+        if (saveSequence[sequenceIndex] == '3') {
+        } else {
+            AudioPlayer.buttonClick2();
+        }
+
+        //check if round ended
+        if (sequenceIndex+1 < saveSequence.length) {
+            //process to next index in sequence
+            setSequenceIndex(sequenceIndex + 1);
+        } else {
+            // entire sequence was correct
+        }
+    }
+
 
 
     
@@ -180,21 +234,21 @@ export const Game = () => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td onClick={() => AudioPlayer.buttonClick1()} onMouseOver={handleSelected(handleGreenSelected)}>
+                            <td onMouseOver={handleSelected(handleGreenSelected)}>
                                 {greenSelected ? <img src={lightGreen} alt="greenLight" /> : <img src={greenDark} alt="greendarj" />}
 
                             </td>
-                            <td onClick={() => AudioPlayer.buttonClick2()} onMouseOver={handleSelected(handleRedSelected)}>
+                            <td onMouseOver={handleSelected(handleRedSelected)}>
                                 {redSelected ? <img src={lightRed} alt="lightRed" /> : <img src={redDark} alt="redDark" />}
 
                             </td>
                         </tr>
                         <tr>
-                            <td onClick={() => AudioPlayer.buttonClick1()} onMouseOver={handleSelected(handleYellowSelected)}>
+                            <td onMouseOver={handleSelected(handleYellowSelected)}>
                                 {yellowSelected ? <img src={yellowLight} alt="yellowLight" /> : <img src={yellowDark} alt="yellow" />}
 
                             </td>
-                            <td onClick={() => AudioPlayer.buttonClick2()} onMouseOver={handleSelected(handleBlueSelected)}>
+                            <td onMouseOver={handleSelected(handleBlueSelected)}>
                                 {blueSelected ? <img src={blueLight} alt="blueLight" /> : <img src={blueDark} alt="blueDark" />}
                             </td>
                         </tr>
