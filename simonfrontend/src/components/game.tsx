@@ -10,40 +10,146 @@ import lightGreen from "../img/greenLight.png"
 import lightRed from "../img/redLight.png"
 
 
-export const Game = (sequenceLength: number) => {
+export const Game = () => {
+
+    //for game playing
     const [sequence, setSequence] = useState("");
+    const [notPromptSequence, setNotPropmtSequence] = useState(true);
+    const [delayTime, setDelayTime] = useState(1000);
+
+    //for UI prompt
     const [blueSelected, setBlueSelected] = useState(false);
     const [yellowSelected, setYellowSelected] = useState(false);
     const [greenSelected, setGreenSelected] = useState(false);
     const [redSelected, setRedSelected] = useState(false);
 
+    const playGame = async (sequenceLength: number) => {
+        let newSequence = "";
+        let times = 0;
+        let newLight = 0;
 
-    let newSequence = "";
-    let times = 0;
-    while (++times < sequenceLength) {
-        newSequence += Math.trunc(Math.random() * 100) % 4;
+        //begin prompting the sequence
+        setNotPropmtSequence(false);
+
+        while (++times < sequenceLength) {
+            newLight = Math.trunc(Math.random() * 100) % 4;
+            switch (newLight) {
+                case 0:
+                    setBlueSelected(true);
+                    setTimeout(() => setBlueSelected(false), delayTime);
+                    break;
+            
+                case 1:
+                    setYellowSelected(true);
+                    setTimeout(() => setYellowSelected(false), delayTime);
+                    break;
+
+                case 2:
+                    setRedSelected(true);
+                    setTimeout(() => setRedSelected(false), delayTime);
+                    break;
+
+                case 3:
+                    setGreenSelected(true);
+                    setTimeout(() => setGreenSelected(false), delayTime);
+                    break;
+            }
+            newSequence += newLight;
+        }
+        
+        //finish prompting the sequence
+        setNotPropmtSequence(true);
+
+        setSequence(newSequence);
+        for (let lights of sequence) {
+            
+        }
     }
 
+    
+    // const handleRedClicked = () => {
+    //     setRedSelected(false);
+
+    //     onmouseup = (onmouseover = (() => handleRedSelected))
+    // }
+    // const handleGreenClicked = () => {
+    //     setGreenSelected(false);
+
+    //     onmouseup = (onmouseover = (() => handleGreenSelected))
+    // }
+
+
+    // const handleBlueClicked = () => {
+    //     setBlueSelected(false);
+
+    //     onmouseup = (onmouseover = (() => handleBlueSelected))
+    // }
+
+    // const handleYellowClicked = () => {
+    //     setYellowSelected(false);
+
+    //     onmouseup = (onmouseover = (() => handleYellowSelected))
+    // }
+
+
+    
+    // regular button light flashing
+
+    const handleSelected = (prop:any) => {
+        if (notPromptSequence) return prop
+    }
+
+    const handleClicked = (prop:any) => {
+        if (notPromptSequence) return prop;
+    }
+
+    // blue
     const handleBlueSelected = () => {
         setBlueSelected(true);
 
-        onmouseout = (() => { setBlueSelected(false) })
+        onmousedown =(() => {setBlueSelected(false)})
+
+        onmouseup = (() => {setBlueSelected(true)})
+
+
+        onmouseout = (() => {setBlueSelected(false) })
     }
+
+    // yellow
     const handleYellowSelected = () => {
         setYellowSelected(true);
 
+        onmousedown =(() => {setYellowSelected(false)})
+
+        onmouseup = (() => {setYellowSelected(true)})
+
+
         onmouseout = (() => { setYellowSelected(false) })
     }
+    
+    // red
     const handleRedSelected = () => {
         setRedSelected(true);
 
-        onmouseout = (() => { setRedSelected(false) })
+        onmousedown =(() => {setRedSelected(false)})
+
+        onmouseup = (() => {setRedSelected(true)})
+
+        onmouseout = (() => {setRedSelected(false) })
     }
+
+    // green
     const handleGreenSelected = () => {
         setGreenSelected(true);
 
-        onmouseout = (() => { setGreenSelected(false) })
+        onmousedown =(() => {setGreenSelected(false)})
+
+        onmouseup = (() => {setGreenSelected(true)})
+
+        onmouseout = (() => {setGreenSelected(false)})
     }
+    
+
     return (
 
     <div className="wholegame" style={{ paddingTop: "25 px", paddingBottom: "20px" }}>
@@ -58,26 +164,25 @@ export const Game = (sequenceLength: number) => {
                 <table>
                     <thead>
                         <tr>
-
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td onMouseOver={handleGreenSelected}>
+                            <td onMouseOver={handleSelected(handleGreenSelected)}>
                                 {greenSelected ? <img src={lightGreen} alt="greenLight" /> : <img src={greenDark} alt="greendarj" />}
 
                             </td>
-                            <td onMouseOver={handleRedSelected}>
+                            <td onMouseOver={handleSelected(handleRedSelected)}>
                                 {redSelected ? <img src={lightRed} alt="lightRed" /> : <img src={redDark} alt="redDark" />}
 
                             </td>
                         </tr>
                         <tr>
-                            <td onMouseOver={handleYellowSelected}>
+                            <td onMouseOver={handleSelected(handleYellowSelected)}>
                                 {yellowSelected ? <img src={yellowLight} alt="yellowLight" /> : <img src={yellowDark} alt="yellow" />}
 
                             </td>
-                            <td onMouseOver={handleBlueSelected}>
+                            <td onMouseOver={handleSelected(handleBlueSelected)}>
                                 {blueSelected ? <img src={blueLight} alt="blueLight" /> : <img src={blueDark} alt="blueDark" />}
                             </td>
                         </tr>
