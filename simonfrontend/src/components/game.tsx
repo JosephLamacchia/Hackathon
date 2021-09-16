@@ -8,6 +8,7 @@ import blueLight from '../img/blueLight.png'
 import yellowLight from "../img/yellowLight.png"
 import lightGreen from "../img/greenLight.png"
 import lightRed from "../img/redLight.png"
+import AudioPlayer from "./AudioPlayer"
 
 
 export const Game = () => {
@@ -168,21 +169,21 @@ export const Game = () => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td onMouseOver={handleSelected(handleGreenSelected)}>
+                            <td onClick={() => AudioPlayer.buttonClick1()} onMouseOver={handleGreenSelected}>
                                 {greenSelected ? <img src={lightGreen} alt="greenLight" /> : <img src={greenDark} alt="greendarj" />}
 
                             </td>
-                            <td onMouseOver={handleSelected(handleRedSelected)}>
+                            <td onClick={() => AudioPlayer.buttonClick2()} onMouseOver={handleRedSelected}>
                                 {redSelected ? <img src={lightRed} alt="lightRed" /> : <img src={redDark} alt="redDark" />}
 
                             </td>
                         </tr>
                         <tr>
-                            <td onMouseOver={handleSelected(handleYellowSelected)}>
+                            <td onClick={() => AudioPlayer.buttonClick1()} onMouseOver={handleYellowSelected}>
                                 {yellowSelected ? <img src={yellowLight} alt="yellowLight" /> : <img src={yellowDark} alt="yellow" />}
 
                             </td>
-                            <td onMouseOver={handleSelected(handleBlueSelected)}>
+                            <td onClick={() => AudioPlayer.buttonClick2()} onMouseOver={handleBlueSelected}>
                                 {blueSelected ? <img src={blueLight} alt="blueLight" /> : <img src={blueDark} alt="blueDark" />}
                             </td>
                         </tr>
