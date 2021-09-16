@@ -69,6 +69,7 @@ export const Game = () => {
 
     // handle in game event
     const handleClicked = (prop:any) => {
+        AudioPlayer.buttonClick1();
         if (inGame) return prop;
     }
 
@@ -77,8 +78,10 @@ export const Game = () => {
     const handleBlueClicked = () => {
         let saveSequence = sequence;
         if (saveSequence[sequenceIndex] == '2') {
-            AudioPlayer.buttonClick1();
+            // click the correct color
+            // calculating score could go here
         } else {
+            // click the wrong color
             AudioPlayer.buttonClick2();
         }
 
@@ -94,7 +97,6 @@ export const Game = () => {
     const handleYellowClicked = () => {
         let saveSequence = sequence;
         if (saveSequence[sequenceIndex] == '2') {
-            AudioPlayer.buttonClick1();
         } else {
             AudioPlayer.buttonClick2();
         }
@@ -111,7 +113,6 @@ export const Game = () => {
     const handleRedClicked = () => {
         let saveSequence = sequence;
         if (saveSequence[sequenceIndex] == '2') {
-            AudioPlayer.buttonClick1();
         } else {
             AudioPlayer.buttonClick2();
         }
@@ -128,7 +129,6 @@ export const Game = () => {
     const handleGreenClicked = () => {
         let saveSequence = sequence;
         if (saveSequence[sequenceIndex] == '3') {
-            AudioPlayer.buttonClick1();
         } else {
             AudioPlayer.buttonClick2();
         }
