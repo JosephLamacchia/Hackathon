@@ -9,7 +9,7 @@ import blueLight from '../img/blueLight.png'
 import yellowLight from "../img/yellowLight.png"
 import lightGreen from "../img/greenLight.png"
 import lightRed from "../img/redLight.png"
-import { beginGame } from "../slice/Game"
+import { beginGame, levelUp, addToCpuSequence, setNextState } from "../slice/Game"
 import AudioPlayer from "./AudioPlayer"
 
 
@@ -28,17 +28,108 @@ export const Game = () => {
     const [greenSelected, setGreenSelected] = useState(false);
     const [redSelected, setRedSelected] = useState(false);
     const dispatch = useDispatch();
-    const  gameState  = useSelector( (state:any) => state.GameState.state)
+    const  game  = useSelector( (state:any) => state.GameState)
 
-    const playGame = async (sequenceLength: number) => {
+    const playGame = () => {
         let newSequence = "";
         let times = 0;
         let newLight = 0;
+        let gameLoop;
+        let currentLight = 0;
+        let lightCounter = 0;
 
         //begin prompting the sequence
         setNotPropmtSequence(false);
 
-        while (++times < sequenceLength) {
+        gameLoop = setTimeout(() => {
+            switch(game.state)
+            {
+                case 0:
+                {
+                    break;
+                }
+                // NOTES(): InitGame
+                case 1: {
+                    dispatch(levelUp(""));
+                    times = 0;
+                     while (++times < game.sequenceNumber) {
+                        newLight = Math.trunc(Math.random() * 100) % 4;
+                         dispatch(addToCpuSequence(newLight));
+                     }
+
+                     dispatch(setNextState(2));
+                     break;
+                }
+                // NOTES(): this will present demostration of the pattern 
+                case 2:
+                {
+                    currentLight = game.cpuSequence[lightCounter];
+                    switch(currentLight)
+                    {
+                        case 0:
+                        {
+                            setBlueSelected(true);
+                            break;
+                        }
+                                    
+                        case 1:
+                        {
+                            setYellowSelected(true);
+                            break;
+                        }
+                        case 2:
+                        {
+                            setRedSelected(true);
+                            break;
+                        }
+
+                        case 3:
+                        {
+                            setGreenSelected(true);
+                            break;
+                        }
+                    }
+                    dispatch(setNextState(3));
+                    break;       
+                }
+                case 3:
+                {    
+                    switch(currentLight)
+                    {
+                        case 0:
+                        {
+                            setBlueSelected(false);
+                            break;
+                        }
+                                    
+                        case 1:
+                        {
+                            setYellowSelected(false);
+                            break;
+                        }
+                        case 2:
+                        {
+                            setRedSelected(false);
+                            break;
+                        }
+
+                        case 3:
+                        {
+                            setGreenSelected(false);
+                            break;
+                        }
+                    }
+                    if (lightCounter == game.sequenceNumber)
+                    {
+                        lightCounter++;
+                    } else {
+                        dispatch(setNextState(3));
+                    }
+                }
+            }
+        }, 1);        
+/*
+        while (++times < 5) {
             newLight = Math.trunc(Math.random() * 100) % 4;
             switch (newLight) {
                 case 0:
@@ -69,6 +160,7 @@ export const Game = () => {
         setSequence(newSequence);
         setSequenceIndex(0);
         setInGame(true);
+        */
     }
 
     // handle in game event
@@ -207,10 +299,11 @@ export const Game = () => {
         onmouseout = (() => {setGreenSelected(false)})
     }
     const handleBeginGame = () => {
-        if (gameState == 0)
+
+        if (game.state == 0)
         {
-            playGame(1);
             dispatch(beginGame(""));
+            playGame();
         } else  {
         }
     }

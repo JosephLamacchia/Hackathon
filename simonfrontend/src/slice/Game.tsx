@@ -5,7 +5,7 @@ export const gameSlice = createSlice({
     name: "gameState",
     initialState: {
         state: 0,
-        sequenceNumber: 0,
+        sequenceNumber: 5,
         cpuSequence:[] as Number[],
         playerSequence:[] as Number[]
 
@@ -13,12 +13,13 @@ export const gameSlice = createSlice({
     reducers: {
         beginGame:(state, action) => {
                 state.state = 1;
+                //state.sequenceNumber = 0;
                 state.cpuSequence = [];
                 state.playerSequence = [];
         },
         endGame:(state, action) => {
                 state.state = 3;
-                state.sequenceNumber = 0;
+                //state.sequenceNumber = 0;
 
         },
         addToCpuSequence: (state, action) => {
@@ -28,9 +29,17 @@ export const gameSlice = createSlice({
         addToPlayerSequence: (state, action) => {
             let newNumber: Number = action.payload;
             state.playerSequence.push(newNumber);
+        },
+        levelUp: (state, action) =>
+        {
+            state.sequenceNumber++;
+        },
+        setNextState: (state, action) => 
+        {
+            state.state = action.payload;
         }
     }
 });
 
-export const { beginGame, endGame, addToCpuSequence, addToPlayerSequence} = gameSlice.actions;
+export const { setNextState,beginGame, endGame, addToCpuSequence, addToPlayerSequence, levelUp} = gameSlice.actions;
 export default gameSlice.reducer;
