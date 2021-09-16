@@ -4,10 +4,19 @@ import greenDark from '../img/greenDark.png'
 import redDark from '../img/redDark.png'
 import yellowDark from '../img/yellowDark.png'
 import blueDark from '../img/blueDark.png'
+import blueLight from '../img/blueLight.png'
+import yellowLight from "../img/yellowLight.png"
+import lightGreen from "../img/greenLight.png"
+import lightRed from "../img/redLight.png"
 
 
 export const Game = (sequenceLength: number) => {
     const [sequence, setSequence] = useState("");
+    const [blueSelected, setBlueSelected] = useState(false);
+    const [yellowSelected, setYellowSelected] = useState(false);
+    const [greenSelected, setGreenSelected] = useState(false);
+    const [redSelected, setRedSelected] = useState(false);
+
 
     let newSequence = "";
     let times = 0;
@@ -15,48 +24,72 @@ export const Game = (sequenceLength: number) => {
         newSequence += Math.trunc(Math.random() * 100) % 4;
     }
 
-    return (<div>
-        <div className="wholegame" style={{ paddingTop: "25px", paddingBottom: "20px" }}>
+    const handleBlueSelected = () => {
+        setBlueSelected(true);
 
-            <div className="" style={{ position: "relative", display: "flex", justifyContent: "center", width: "100vw" }}>
-                <div className="circle" >  </div>
-                <div className="circle2" >
-                    <div className="" style={{ marginTop: "40%" }} >
-                        SIMON
-                    </div> </div>
-                <div className="simoncircle">
-                    <table>
-                        <thead>
-                            <tr>
+        onmouseout = (() => { setBlueSelected(false) })
+    }
+    const handleYellowSelected = () => {
+        setYellowSelected(true);
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <img src={greenDark} style={{ border: 'none' }} alt="green" />
-                                </td>
-                                <td>
-                                    <img src={redDark} style={{ border: 'none' }} alt="red" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <img src={yellowDark} style={{ border: 'none' }} alt="yello" />
-                                </td>
-                                <td>
-                                    <img src={blueDark} style={{ border: 'none' }} alt="blue" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+        onmouseout = (() => { setYellowSelected(false) })
+    }
+    const handleRedSelected = () => {
+        setRedSelected(true);
 
+        onmouseout = (() => { setRedSelected(false) })
+    }
+    const handleGreenSelected = () => {
+        setGreenSelected(true);
+
+        onmouseout = (() => { setGreenSelected(false) })
+    }
+    return (
+
+    <div className="wholegame" style={{ paddingTop: "25 px", paddingBottom: "20px" }}>
+
+        <div className="" style={{ position: "relative", display: "flex", justifyContent: "center", width: "100vw" }}>
+            <div className="circle" >  </div>
+            <div className="circle2" >
+                <div className="" style={{ marginTop: "40%", fontFamily: "cursive", fontWeight: "bold" }} >
+                    SIMON
+                </div> </div>
+            <div className="simoncircle">
+                <table>
+                    <thead>
+                        <tr>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td onMouseOver={handleGreenSelected}>
+                                {greenSelected ? <img src={lightGreen} alt="greenLight" /> : <img src={greenDark} alt="greendarj" />}
+
+                            </td>
+                            <td onMouseOver={handleRedSelected}>
+                                {redSelected ? <img src={lightRed} alt="lightRed" /> : <img src={redDark} alt="redDark" />}
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td onMouseOver={handleYellowSelected}>
+                                {yellowSelected ? <img src={yellowLight} alt="yellowLight" /> : <img src={yellowDark} alt="yellow" />}
+
+                            </td>
+                            <td onMouseOver={handleBlueSelected}>
+                                {blueSelected ? <img src={blueLight} alt="blueLight" /> : <img src={blueDark} alt="blueDark" />}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
-
-
         </div>
+
+
+
     </div>
-    )
+        
+    )  
 }
