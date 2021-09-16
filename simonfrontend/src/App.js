@@ -1,5 +1,3 @@
-import React from 'react';
-import { Game } from './components/game';
 import './App.css';
 
 function App() {
@@ -8,6 +6,7 @@ function App() {
       <header className="App-header">
         <Game/>
       </header>
+
     </div>
   );
 }
