@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import '../css/game.css'
 import greenDark from '../img/greenDark.png'
 import redDark from '../img/redDark.png'
@@ -8,6 +9,7 @@ import blueLight from '../img/blueLight.png'
 import yellowLight from "../img/yellowLight.png"
 import lightGreen from "../img/greenLight.png"
 import lightRed from "../img/redLight.png"
+import { beginGame } from "../slice/Game"
 import AudioPlayer from "./AudioPlayer"
 
 
@@ -25,6 +27,8 @@ export const Game = () => {
     const [yellowSelected, setYellowSelected] = useState(false);
     const [greenSelected, setGreenSelected] = useState(false);
     const [redSelected, setRedSelected] = useState(false);
+    const dispatch = useDispatch();
+    const  gameState  = useSelector( (state:any) => state.GameState.state)
 
     const playGame = async (sequenceLength: number) => {
         let newSequence = "";
@@ -202,6 +206,14 @@ export const Game = () => {
 
         onmouseout = (() => {setGreenSelected(false)})
     }
+    const handleBeginGame = () => {
+        if (gameState == 0)
+        {
+            playGame(1);
+            dispatch(beginGame(""));
+        } else  {
+        }
+    }
     
 
     return (
@@ -243,8 +255,12 @@ export const Game = () => {
                     </tbody>
                 </table>
             </div>
+        </div>
+        <br></br><br></br>
+        <div>
+            <button  className="btn btn-primary" onClick={handleBeginGame}>Begin Game</button>
+        </div>
        </div>
-    </div>
         
     )  
 }
