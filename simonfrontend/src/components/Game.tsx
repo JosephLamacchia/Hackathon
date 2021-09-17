@@ -22,7 +22,7 @@ export const Game = () => {
     const [inGame, setInGame] = useState(false);
 
     //for game initializing
-    const [initialLength, setInitialLength] = useState(5);
+    const [initialLength, setInitialLength] = useState(1);
     const [delayTime, setDelayTime] = useState(1000);
 
     //for UI prompt
@@ -32,6 +32,8 @@ export const Game = () => {
     const [redSelected, setRedSelected] = useState(false);
     const dispatch = useDispatch();
     const gameState = useSelector((state: any) => state.GameState.state)
+
+    const [count, setCount] = useState<number>(0);
 
     const sleep = (time: number) => {
         return new Promise(resolve => setTimeout(resolve, time));
@@ -43,7 +45,7 @@ export const Game = () => {
         let newLight = 0;
 
         //begin prompting the sequence
-        setNotPropmtSequence(false);
+        
 
         while (i < sequenceLength) {
 
@@ -101,6 +103,8 @@ export const Game = () => {
                 // click the wrong color
                 AudioPlayer.gameOver();
 
+                setCount(0);
+
                 setInGame(false);
                 return;
             }
@@ -111,6 +115,10 @@ export const Game = () => {
                 setSequenceIndex(sequenceIndex + 1);
             } else {
                 // entire sequence was correct
+                setNotPropmtSequence(false);
+
+                AudioPlayer.buttonClick2();
+
                 setBlueSelected(true);
                 setYellowSelected(true);
                 setGreenSelected(true);
@@ -121,6 +129,8 @@ export const Game = () => {
                 setTimeout(() => setRedSelected(false), delayTime);
                 setTimeout(() => setGreenSelected(false), delayTime);
 
+                setCount(count+1)
+                
                 playGame(sequence.length + 1);
             }
         }
@@ -185,52 +195,53 @@ export const Game = () => {
     }
 
     const handleBeginGame = () => {
-        if (gameState === 0) {
-            playGame(initialLength);
-            dispatch(beginGame(""));
-        } else {
-        }
+        setNotPropmtSequence(false);
+        AudioPlayer.buttonClick2();
+        playGame(initialLength);
+        dispatch(beginGame(""));
     }
 
 
     return (
+    <div className="wholegame" style={{ paddingTop: "25 px", paddingBottom: "20px" }}>
 
-        <div className="wholegame" style={{ paddingTop: "25 px", paddingBottom: "20px" }}>
+        <div className="" style={{ position: "relative", display: "flex", justifyContent: "center", width: "100vw" }}>
+            <div className="circle" >  </div>
+            <div className="circle2" >
+                <div className="" style={{ marginTop: "40%", fontFamily: "cursive", fontWeight: "bold" }} >
+                    SIMON
+                    <br></br>
+                    Score: {count}
+                </div> 
+                </div>
+            <div className="simoncircle">
+                <table>
+                    <thead>
+                        <tr>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td onMouseOver={handleSelected(handleGreenSelected)} data-testid="testTd">
+                                {greenSelected ? <img src={lightGreen} alt="greenLight" /> : <img src={greenDark} alt="greendarj" title="testTd" />}
 
-            <div className="" style={{ position: "relative", display: "flex", justifyContent: "center", width: "100vw" }}>
-                <div className="circle" >  </div>
-                <div className="circle2" >
-                    <div className="" style={{ marginTop: "40%", fontFamily: "cursive", fontWeight: "bold" }} >
-                        SIMON
-                    </div> </div>
-                <div className="simoncircle" >
-                    <table>
-                        <thead>
-                            <tr>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td onMouseOver={handleSelected(handleGreenSelected)} data-testid="testTd" >
-                                    {greenSelected ? <img src={lightGreen} alt="greenLight" /> : <img src={greenDark} alt="greendarj" title="testTd" />}
+                            </td>
+                            <td onMouseOver={handleSelected(handleRedSelected)}>
+                                {redSelected ? <img src={lightRed} alt="lightRed" /> : <img src={redDark} alt="redDark" />}
 
-                                </td>
-                                <td onMouseOver={handleSelected(handleRedSelected)}>
-                                    {redSelected ? <img src={lightRed} alt="lightRed" /> : <img src={redDark} alt="redDark" />}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td onMouseOver={handleSelected(handleYellowSelected)}>
+                                {yellowSelected ? <img src={yellowLight} alt="yellowLight" /> : <img src={yellowDark} alt="yellow" />}
 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td onMouseOver={handleSelected(handleYellowSelected)}>
-                                    {yellowSelected ? <img src={yellowLight} alt="yellowLight" /> : <img src={yellowDark} alt="yellow" />}
-
-                                </td>
-                                <td onMouseOver={handleSelected(handleBlueSelected)} >
-                                    {blueSelected ? <img src={blueLight} alt="blueLight" /> : <img src={blueDark} alt="blueDark" />}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            </td>
+                            <td onMouseOver={handleSelected(handleBlueSelected)}>
+                                {blueSelected ? <img src={blueLight} alt="blueLight" /> : <img src={blueDark} alt="blueDark" />}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
                 </div>
             </div>
             <br></br><br></br>
