@@ -20,6 +20,9 @@ export const Game = () => {
     const [notPromptSequence, setNotPropmtSequence] = useState(true);
     const [sequenceIndex, setSequenceIndex] = useState(0);
     const [inGame, setInGame] = useState(false);
+
+    //for game initializing
+    const [initialLength, setInitialLength] = useState(5);
     const [delayTime, setDelayTime] = useState(1000);
 
     //for UI prompt
@@ -28,42 +31,54 @@ export const Game = () => {
     const [greenSelected, setGreenSelected] = useState(false);
     const [redSelected, setRedSelected] = useState(false);
     const dispatch = useDispatch();
-    const  gameState  = useSelector( (state:any) => state.GameState.state)
+    const gameState = useSelector((state: any) => state.GameState.state)
+
+    const sleep = (time: number) => {
+        return new Promise(resolve => setTimeout(resolve, time));
+    }
 
     const playGame = async (sequenceLength: number) => {
         let newSequence = "";
-        let times = 0;
+        let i = 0;
         let newLight = 0;
 
         //begin prompting the sequence
         setNotPropmtSequence(false);
 
-        while (++times < sequenceLength) {
+        while (i < sequenceLength) {
+
+            await sleep(delayTime);
             newLight = Math.trunc(Math.random() * 100) % 4;
             switch (newLight) {
                 case 0:
                     setBlueSelected(true);
-                    setTimeout(() => setBlueSelected(false), delayTime);
+                    await sleep(delayTime);
+                    setBlueSelected(false);
                     break;
-            
+
                 case 1:
                     setYellowSelected(true);
-                    setTimeout(() => setYellowSelected(false), delayTime);
+                    await sleep(delayTime);
+                    setYellowSelected(false);
                     break;
 
                 case 2:
                     setRedSelected(true);
-                    setTimeout(() => setRedSelected(false), delayTime);
+                    await sleep(delayTime);
+                    setRedSelected(false);
                     break;
 
                 case 3:
                     setGreenSelected(true);
-                    setTimeout(() => setGreenSelected(false), delayTime);
+                    await sleep(delayTime);
+                    setGreenSelected(false);
                     break;
             }
+
+            i++;
             newSequence += newLight;
         }
-        
+
         //finish prompting the sequence
         setNotPropmtSequence(true);
         setSequence(newSequence);
@@ -72,86 +87,48 @@ export const Game = () => {
     }
 
     // handle in game event
-    const handleClicked = (prop:any) => {
-        AudioPlayer.buttonClick1();
-        if (inGame) return prop;
-    }
-
     // blue 0 yellow 1 red 2 green 3
+    const handleClicked = (colorClicked: string) => {
+        AudioPlayer.buttonClick1();
 
-    const handleBlueClicked = () => {
-        let saveSequence = sequence;
-        if (saveSequence[sequenceIndex] == '2') {
-            // click the correct color
-            // calculating score could go here
-        } else {
-            // click the wrong color
-            AudioPlayer.buttonClick2();
-        }
+        if (inGame) {
+            let saveSequence = sequence;
 
-        //check if round ended
-        if (sequenceIndex+1 < saveSequence.length) {
-            //process to next index in sequence
-            setSequenceIndex(sequenceIndex + 1);
-        } else {
-            // entire sequence was correct
-        }
-    }
+            if (saveSequence.charAt(sequenceIndex) === colorClicked) {
+                // click the correct color
+                // calculating score could go here
+            } else {
+                // click the wrong color
+                AudioPlayer.gameOver();
 
-    const handleYellowClicked = () => {
-        let saveSequence = sequence;
-        if (saveSequence[sequenceIndex] == '2') {
-        } else {
-            AudioPlayer.buttonClick2();
-        }
+                setInGame(false);
+                return;
+            }
 
-        //check if round ended
-        if (sequenceIndex+1 < saveSequence.length) {
-            //process to next index in sequence
-            setSequenceIndex(sequenceIndex + 1);
-        } else {
-            // entire sequence was correct
-        }
-    }
+            //check if round ended
+            if (sequenceIndex + 1 < saveSequence.length) {
+                //proceed to next index in sequence
+                setSequenceIndex(sequenceIndex + 1);
+            } else {
+                // entire sequence was correct
+                setBlueSelected(true);
+                setYellowSelected(true);
+                setGreenSelected(true);
+                setRedSelected(true);
 
-    const handleRedClicked = () => {
-        let saveSequence = sequence;
-        if (saveSequence[sequenceIndex] == '2') {
-        } else {
-            AudioPlayer.buttonClick2();
-        }
+                setTimeout(() => setBlueSelected(false), delayTime);
+                setTimeout(() => setYellowSelected(false), delayTime);
+                setTimeout(() => setRedSelected(false), delayTime);
+                setTimeout(() => setGreenSelected(false), delayTime);
 
-        //check if round ended
-        if (sequenceIndex+1 < saveSequence.length) {
-            //process to next index in sequence
-            setSequenceIndex(sequenceIndex + 1);
-        } else {
-            // entire sequence was correct
+                playGame(sequence.length + 1);
+            }
         }
     }
 
-    const handleGreenClicked = () => {
-        let saveSequence = sequence;
-        if (saveSequence[sequenceIndex] == '3') {
-        } else {
-            AudioPlayer.buttonClick2();
-        }
-
-        //check if round ended
-        if (sequenceIndex+1 < saveSequence.length) {
-            //process to next index in sequence
-            setSequenceIndex(sequenceIndex + 1);
-        } else {
-            // entire sequence was correct
-        }
-    }
-
-
-
-    
     // regular button light flashing
 
-    const handleSelected = (prop:any) => {
+    const handleSelected = (prop: any) => {
         if (notPromptSequence) return prop
     }
 
@@ -159,108 +136,108 @@ export const Game = () => {
     const handleBlueSelected = () => {
         setBlueSelected(true);
 
-        onmousedown =(() => {setBlueSelected(false)})
+        onmousedown = (() => { setBlueSelected(false) })
 
-        onmouseup = (() => {setBlueSelected(true)})
+        onmouseup = (() => { setBlueSelected(true) })
 
-        onclick = (() => {handleClicked(handleBlueClicked)})
+        onclick = (() => { handleClicked('0') })
 
-        onmouseout = (() => {setBlueSelected(false) })
+        onmouseout = (() => { setBlueSelected(false) })
     }
 
     // yellow
     const handleYellowSelected = () => {
         setYellowSelected(true);
 
-        onmousedown =(() => {setYellowSelected(false)})
+        onmousedown = (() => { setYellowSelected(false) })
 
-        onmouseup = (() => {setYellowSelected(true)})
+        onmouseup = (() => { setYellowSelected(true) })
 
-        onclick = (() => {handleClicked(handleYellowClicked)})
+        onclick = (() => { handleClicked('1') })
 
         onmouseout = (() => { setYellowSelected(false) })
     }
-    
+
     // red
     const handleRedSelected = () => {
         setRedSelected(true);
 
-        onmousedown =(() => {setRedSelected(false)})
+        onmousedown = (() => { setRedSelected(false) })
 
-        onmouseup = (() => {setRedSelected(true)})
+        onmouseup = (() => { setRedSelected(true) })
 
-        onclick = (() => {handleClicked(handleRedClicked)})
+        onclick = (() => { handleClicked('2') })
 
-        onmouseout = (() => {setRedSelected(false) })
+        onmouseout = (() => { setRedSelected(false) })
     }
 
     // green
     const handleGreenSelected = () => {
         setGreenSelected(true);
 
-        onmousedown =(() => {setGreenSelected(false)})
+        onmousedown = (() => { setGreenSelected(false) })
 
-        onmouseup = (() => {setGreenSelected(true)})
+        onmouseup = (() => { setGreenSelected(true) })
 
-        onclick = (() => {handleClicked(handleGreenClicked)})
+        onclick = (() => { handleClicked('3') })
 
-        onmouseout = (() => {setGreenSelected(false)})
+        onmouseout = (() => { setGreenSelected(false) })
     }
+
     const handleBeginGame = () => {
-        if (gameState == 0)
-        {
-            playGame(1);
+        if (gameState === 0) {
+            playGame(initialLength);
             dispatch(beginGame(""));
-        } else  {
+        } else {
         }
     }
-    
+
 
     return (
 
-    <div className="wholegame" style={{ paddingTop: "25 px", paddingBottom: "20px" }}>
+        <div className="wholegame" style={{ paddingTop: "25 px", paddingBottom: "20px" }}>
 
-        <div className="" style={{ position: "relative", display: "flex", justifyContent: "center", width: "100vw" }}>
-            <div className="circle" >  </div>
-            <div className="circle2" >
-                <div className="" style={{ marginTop: "40%", fontFamily: "cursive", fontWeight: "bold" }} >
-                    SIMON
-                </div> </div>
-            <div className="simoncircle">
-                <table>
-                    <thead>
-                        <tr>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td onMouseOver={handleSelected(handleGreenSelected)}>
-                                {greenSelected ? <img src={lightGreen} alt="greenLight" /> : <img src={greenDark} alt="greendarj" />}
+            <div className="" style={{ position: "relative", display: "flex", justifyContent: "center", width: "100vw" }}>
+                <div className="circle" >  </div>
+                <div className="circle2" >
+                    <div className="" style={{ marginTop: "40%", fontFamily: "cursive", fontWeight: "bold" }} >
+                        SIMON
+                    </div> </div>
+                <div className="simoncircle" >
+                    <table>
+                        <thead>
+                            <tr>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td onMouseOver={handleSelected(handleGreenSelected)} data-testid="testTd" >
+                                    {greenSelected ? <img src={lightGreen} alt="greenLight" /> : <img src={greenDark} alt="greendarj" title="testTd" />}
 
-                            </td>
-                            <td onMouseOver={handleSelected(handleRedSelected)}>
-                                {redSelected ? <img src={lightRed} alt="lightRed" /> : <img src={redDark} alt="redDark" />}
+                                </td>
+                                <td onMouseOver={handleSelected(handleRedSelected)}>
+                                    {redSelected ? <img src={lightRed} alt="lightRed" /> : <img src={redDark} alt="redDark" />}
 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td onMouseOver={handleSelected(handleYellowSelected)}>
-                                {yellowSelected ? <img src={yellowLight} alt="yellowLight" /> : <img src={yellowDark} alt="yellow" />}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td onMouseOver={handleSelected(handleYellowSelected)}>
+                                    {yellowSelected ? <img src={yellowLight} alt="yellowLight" /> : <img src={yellowDark} alt="yellow" />}
 
-                            </td>
-                            <td onMouseOver={handleSelected(handleBlueSelected)}>
-                                {blueSelected ? <img src={blueLight} alt="blueLight" /> : <img src={blueDark} alt="blueDark" />}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                                <td onMouseOver={handleSelected(handleBlueSelected)} >
+                                    {blueSelected ? <img src={blueLight} alt="blueLight" /> : <img src={blueDark} alt="blueDark" />}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <br></br><br></br>
+            <div>
+                <button className="btn btn-primary" onClick={handleBeginGame}>Begin Game</button>
             </div>
         </div>
-        <br></br><br></br>
-        <div>
-            <button  className="btn btn-primary" onClick={handleBeginGame}>Begin Game</button>
-        </div>
-       </div>
-        
-    )  
+
+    )
 }
