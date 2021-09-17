@@ -8,10 +8,12 @@ function App() {
     <div className="App">
       <Provider store={store}>
 
-      <header className="App-header">
-
-        <Game />
-      </header>
+        <header className="App-header">
+          <h1>**Simon Game**</h1>
+          <div style={{ paddingTop: "30px" }}>
+            <Game />
+          </div>
+        </header>
 
       </Provider>
     </div>
