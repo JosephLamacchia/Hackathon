@@ -1,11 +1,10 @@
-import './App.css';
-import { Game } from './components/Game';
+import "./App.css";
+import { Game } from "./components/game";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-
         <Game />
       </header>
     </div>
