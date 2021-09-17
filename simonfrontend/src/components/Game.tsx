@@ -31,11 +31,11 @@ export const Game = () => {
     const [greenSelected, setGreenSelected] = useState(false);
     const [redSelected, setRedSelected] = useState(false);
     const dispatch = useDispatch();
-    const  gameState  = useSelector( (state:any) => state.GameState.state)
+    const gameState = useSelector((state: any) => state.GameState.state)
 
     const [count, setCount] = useState<number>(0);
 
-    const sleep = (time:number) => {
+    const sleep = (time: number) => {
         return new Promise(resolve => setTimeout(resolve, time));
     }
 
@@ -48,7 +48,7 @@ export const Game = () => {
         
 
         while (i < sequenceLength) {
-            
+
             await sleep(delayTime);
             newLight = Math.trunc(Math.random() * 100) % 4;
             switch (newLight) {
@@ -57,7 +57,7 @@ export const Game = () => {
                     await sleep(delayTime);
                     setBlueSelected(false);
                     break;
-            
+
                 case 1:
                     setYellowSelected(true);
                     await sleep(delayTime);
@@ -80,7 +80,7 @@ export const Game = () => {
             i++;
             newSequence += newLight;
         }
-        
+
         //finish prompting the sequence
         setNotPropmtSequence(true);
         setSequence(newSequence);
@@ -90,7 +90,7 @@ export const Game = () => {
 
     // handle in game event
     // blue 0 yellow 1 red 2 green 3
-    const handleClicked = (colorClicked:string) => {
+    const handleClicked = (colorClicked: string) => {
         AudioPlayer.buttonClick1();
 
         if (inGame) {
@@ -108,9 +108,9 @@ export const Game = () => {
                 setInGame(false);
                 return;
             }
-    
+
             //check if round ended
-            if (sequenceIndex+1 < saveSequence.length) {
+            if (sequenceIndex + 1 < saveSequence.length) {
                 //proceed to next index in sequence
                 setSequenceIndex(sequenceIndex + 1);
             } else {
@@ -123,22 +123,22 @@ export const Game = () => {
                 setYellowSelected(true);
                 setGreenSelected(true);
                 setRedSelected(true);
-                
+
                 setTimeout(() => setBlueSelected(false), delayTime);
                 setTimeout(() => setYellowSelected(false), delayTime);
                 setTimeout(() => setRedSelected(false), delayTime);
                 setTimeout(() => setGreenSelected(false), delayTime);
-                
+
                 setCount(count+1)
                 
                 playGame(sequence.length + 1);
             }
         }
     }
-    
+
     // regular button light flashing
 
-    const handleSelected = (prop:any) => {
+    const handleSelected = (prop: any) => {
         if (notPromptSequence) return prop
     }
 
@@ -146,66 +146,63 @@ export const Game = () => {
     const handleBlueSelected = () => {
         setBlueSelected(true);
 
-        onmousedown =(() => {setBlueSelected(false)})
+        onmousedown = (() => { setBlueSelected(false) })
 
-        onmouseup = (() => {setBlueSelected(true)})
+        onmouseup = (() => { setBlueSelected(true) })
 
-        onclick = (() => {handleClicked('0')})
+        onclick = (() => { handleClicked('0') })
 
-        onmouseout = (() => {setBlueSelected(false) })
+        onmouseout = (() => { setBlueSelected(false) })
     }
 
     // yellow
     const handleYellowSelected = () => {
         setYellowSelected(true);
 
-        onmousedown =(() => {setYellowSelected(false)})
+        onmousedown = (() => { setYellowSelected(false) })
 
-        onmouseup = (() => {setYellowSelected(true)})
+        onmouseup = (() => { setYellowSelected(true) })
 
-        onclick = (() => {handleClicked('1')})
+        onclick = (() => { handleClicked('1') })
 
         onmouseout = (() => { setYellowSelected(false) })
     }
-    
+
     // red
     const handleRedSelected = () => {
         setRedSelected(true);
 
-        onmousedown =(() => {setRedSelected(false)})
+        onmousedown = (() => { setRedSelected(false) })
 
-        onmouseup = (() => {setRedSelected(true)})
+        onmouseup = (() => { setRedSelected(true) })
 
-        onclick = (() => {handleClicked('2')})
+        onclick = (() => { handleClicked('2') })
 
-        onmouseout = (() => {setRedSelected(false) })
+        onmouseout = (() => { setRedSelected(false) })
     }
 
     // green
     const handleGreenSelected = () => {
         setGreenSelected(true);
 
-        onmousedown =(() => {setGreenSelected(false)})
+        onmousedown = (() => { setGreenSelected(false) })
 
-        onmouseup = (() => {setGreenSelected(true)})
+        onmouseup = (() => { setGreenSelected(true) })
 
-        onclick = (() => {handleClicked('3')})
+        onclick = (() => { handleClicked('3') })
 
-        onmouseout = (() => {setGreenSelected(false)})
+        onmouseout = (() => { setGreenSelected(false) })
     }
-    
+
     const handleBeginGame = () => {
- 
         setNotPropmtSequence(false);
         AudioPlayer.buttonClick2();
         playGame(initialLength);
         dispatch(beginGame(""));
-
     }
-    
+
 
     return (
-
     <div className="wholegame" style={{ paddingTop: "25 px", paddingBottom: "20px" }}>
 
         <div className="" style={{ position: "relative", display: "flex", justifyContent: "center", width: "100vw" }}>
@@ -225,8 +222,8 @@ export const Game = () => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td onMouseOver={handleSelected(handleGreenSelected)}>
-                                {greenSelected ? <img src={lightGreen} alt="greenLight" /> : <img src={greenDark} alt="greendarj" />}
+                            <td onMouseOver={handleSelected(handleGreenSelected)} data-testid="testTd">
+                                {greenSelected ? <img src={lightGreen} alt="greenLight" /> : <img src={greenDark} alt="greendarj" title="testTd" />}
 
                             </td>
                             <td onMouseOver={handleSelected(handleRedSelected)}>
@@ -245,13 +242,13 @@ export const Game = () => {
                         </tr>
                     </tbody>
                 </table>
+                </div>
+            </div>
+            <br></br><br></br>
+            <div>
+                <button className="btn btn-primary" onClick={handleBeginGame}>Begin Game</button>
             </div>
         </div>
-        <br></br><br></br>
-        <div>
-            <button  className="btn btn-primary" onClick={handleBeginGame}>Begin Game</button>
-        </div>
-       </div>
-        
-    )  
+
+    )
 }
