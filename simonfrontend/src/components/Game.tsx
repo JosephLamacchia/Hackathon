@@ -22,7 +22,7 @@ export const Game = () => {
     const [inGame, setInGame] = useState(false);
 
     //for game initializing
-    const [initialLength, setInitialLength] = useState(5);
+    const [initialLength, setInitialLength] = useState(1);
     const [delayTime, setDelayTime] = useState(1000);
 
     //for UI prompt
@@ -32,6 +32,8 @@ export const Game = () => {
     const [redSelected, setRedSelected] = useState(false);
     const dispatch = useDispatch();
     const  gameState  = useSelector( (state:any) => state.GameState.state)
+
+    const [count, setCount] = useState<number>(0);
 
     const sleep = (time:number) => {
         return new Promise(resolve => setTimeout(resolve, time));
@@ -43,7 +45,7 @@ export const Game = () => {
         let newLight = 0;
 
         //begin prompting the sequence
-        setNotPropmtSequence(false);
+        
 
         while (i < sequenceLength) {
             
@@ -101,6 +103,8 @@ export const Game = () => {
                 // click the wrong color
                 AudioPlayer.gameOver();
 
+                setCount(0);
+
                 setInGame(false);
                 return;
             }
@@ -111,6 +115,10 @@ export const Game = () => {
                 setSequenceIndex(sequenceIndex + 1);
             } else {
                 // entire sequence was correct
+                setNotPropmtSequence(false);
+
+                AudioPlayer.buttonClick2();
+
                 setBlueSelected(true);
                 setYellowSelected(true);
                 setGreenSelected(true);
@@ -120,6 +128,8 @@ export const Game = () => {
                 setTimeout(() => setYellowSelected(false), delayTime);
                 setTimeout(() => setRedSelected(false), delayTime);
                 setTimeout(() => setGreenSelected(false), delayTime);
+                
+                setCount(count+1)
                 
                 playGame(sequence.length + 1);
             }
@@ -185,12 +195,12 @@ export const Game = () => {
     }
     
     const handleBeginGame = () => {
-        if (gameState === 0)
-        {
-            playGame(initialLength);
-            dispatch(beginGame(""));
-        } else  {
-        }
+ 
+        setNotPropmtSequence(false);
+        AudioPlayer.buttonClick2();
+        playGame(initialLength);
+        dispatch(beginGame(""));
+
     }
     
 
@@ -203,7 +213,10 @@ export const Game = () => {
             <div className="circle2" >
                 <div className="" style={{ marginTop: "40%", fontFamily: "cursive", fontWeight: "bold" }} >
                     SIMON
-                </div> </div>
+                    <br></br>
+                    Score: {count}
+                </div> 
+                </div>
             <div className="simoncircle">
                 <table>
                     <thead>
