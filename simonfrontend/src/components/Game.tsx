@@ -99,7 +99,7 @@ export const Game = () => {
                 // calculating score could go here
             } else {
                 // click the wrong color
-                AudioPlayer.buttonClick2();
+                AudioPlayer.gameOver();
 
                 setInGame(false);
                 return;
